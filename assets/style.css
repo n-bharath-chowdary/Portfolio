@@ -242,17 +242,17 @@ section {
   max-width: 380px;
   border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
   background: var(--color-heads);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 1rem;
 }
 #home .hero-image img {
   width: 100%;
   border-radius: var(--border-radius);
-  object-fit: cover;
+  object-fit: fill;
   object-position: center;
   aspect-ratio: 1/1;
   max-height: 380px;
