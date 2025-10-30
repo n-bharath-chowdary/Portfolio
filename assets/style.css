@@ -247,7 +247,7 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 0;
 }
 #home .hero-image img {
   width: 100%;
