@@ -242,7 +242,7 @@ section {
   max-width: 380px;
   border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
   background: var(--color-heads);
   display: flex;
   align-items: center;
