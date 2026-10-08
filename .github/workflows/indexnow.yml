@@ -1,0 +1,50 @@
+name: Tell search engines about changes (IndexNow)
+
+# Search Console is not needed for this. Every time the site changes on HIKE, this waits for
+# GitHub Pages to publish it and then tells Bing, Yandex, Naver, Seznam and Yep through
+# IndexNow, which is also what feeds several AI search products. Google does not take
+# IndexNow; it finds the page through robots.txt -> sitemap.xml and through links from
+# trinetrolabs.com, LinkedIn and GitHub (see README).
+
+on:
+  push:
+    branches: [HIKE]
+    paths:
+      - index.html
+      - assets/**
+      - images/**
+      - sitemap.xml
+      - robots.txt
+      - llms.txt
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait until the new version is live
+        run: |
+          KEY_FILE=$(ls -1 *.txt | grep -E '^[0-9a-f]{32}\.txt$' | head -n 1)
+          echo "KEY_FILE=$KEY_FILE" >> "$GITHUB_ENV"
+          for i in $(seq 1 30); do
+            if curl -fsS "https://kiddosphere.in/$KEY_FILE" | grep -q "${KEY_FILE%.txt}"; then
+              echo "live after $i check(s)"; exit 0
+            fi
+            sleep 10
+          done
+          echo "The site did not answer with the key file in 5 minutes; submitting anyway."
+
+      - name: Submit the page to IndexNow
+        run: |
+          KEY="${KEY_FILE%.txt}"
+          BODY=$(printf '{"host":"kiddosphere.in","key":"%s","keyLocation":"https://kiddosphere.in/%s","urlList":["https://kiddosphere.in/","https://kiddosphere.in/sitemap.xml"]}' "$KEY" "$KEY_FILE")
+          CODE=$(curl -sS -o /tmp/out.txt -w '%{http_code}' -X POST 'https://api.indexnow.org/indexnow' \
+            -H 'Content-Type: application/json; charset=utf-8' -d "$BODY")
+          echo "IndexNow answered $CODE"; cat /tmp/out.txt
+          # 200 = received, 202 = received and the key is being checked. Anything else is worth a look.
+          case "$CODE" in 200|202) exit 0 ;; *) exit 1 ;; esac
