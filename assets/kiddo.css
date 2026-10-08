@@ -1,0 +1,101 @@
+/* ═══════════════════════════════════════════════════════════
+   KIDDO: the portfolio's little guide robot, and its tour.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── the tour veil: everything dims except the thing being explained ── */
+.kd-veil {
+  position: fixed; inset: 0; z-index: 8990; pointer-events: none; opacity: 0; transition: opacity .45s ease;
+  background: rgba(2, 8, 4, .66); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+}
+[data-theme="light"] .kd-veil { background: rgba(15, 23, 42, .55); }
+.kd-veil.on { opacity: 1; }
+.kd-ring {
+  position: fixed; z-index: 8991; pointer-events: none; opacity: 0; border-radius: 20px;
+  border: 2px solid var(--accent-2); box-shadow: 0 0 0 4px rgba(0, 230, 118, .18), 0 0 40px rgba(0, 230, 118, .45);
+  transition: opacity .35s; animation: kdRing 2s ease-in-out infinite;
+}
+.kd-ring.on { opacity: 1; }
+@keyframes kdRing { 50% { box-shadow: 0 0 0 9px rgba(0, 230, 118, .07), 0 0 60px rgba(0, 230, 118, .55); } }
+
+/* ── the robot ── */
+.kd {
+  position: fixed; left: 0; bottom: 18px; z-index: 9000; width: 150px;
+  translate: var(--kx, 0px) 0; transition: translate .85s cubic-bezier(.5, 0, .2, 1);
+}
+.kd-bot {
+  display: block; width: 100%; background: none; border: 0; padding: 0; cursor: pointer; position: relative;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, .45)); -webkit-tap-highlight-color: transparent;
+}
+.kd-bot:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 6px; border-radius: 24px; }
+.kd-bot svg { display: block; width: 100%; height: auto; overflow: visible; transition: transform .5s ease; }
+.kd.face-left .kd-bot svg { transform: scaleX(-1); }
+.kd.entering { animation: kdEnter 1.1s cubic-bezier(.2, 1.3, .4, 1) both; }
+@keyframes kdEnter { from { transform: translateY(160px) scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* parts */
+.kd-float { animation: kdFloat 3.4s ease-in-out infinite; transform-origin: 100px 130px; }
+@keyframes kdFloat { 50% { transform: translateY(-9px); } }
+.kd-flame { transform-box: fill-box; transform-origin: 50% 0; animation: kdFlame .22s ease-in-out infinite alternate; }
+@keyframes kdFlame { from { transform: scaleY(.8) scaleX(.92); opacity: .85; } to { transform: scaleY(1.25) scaleX(1.05); opacity: 1; } }
+.kd-eyes { transform-box: fill-box; transform-origin: center; animation: kdBlink 5s infinite; }
+@keyframes kdBlink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.08); } }
+.kd-star { transform-box: fill-box; transform-origin: center; animation: kdStar 3s ease-in-out infinite; }
+@keyframes kdStar { 0%, 100% { transform: scale(1) rotate(0); filter: drop-shadow(0 0 4px #ffc83d); } 50% { transform: scale(1.22) rotate(18deg); filter: drop-shadow(0 0 12px #ffc83d); } }
+.kd-tail { transform-box: fill-box; transform-origin: 0 0; animation: kdTail 2.2s ease-in-out infinite; }
+@keyframes kdTail { 50% { transform: rotate(9deg) skewX(-6deg); } }
+.kd-arm { transform-origin: 138px 150px; transition: transform .7s cubic-bezier(.4, 0, .2, 1); }
+.kd-arm-rest { transform-origin: 62px 150px; animation: kdSway 3.4s ease-in-out infinite; }
+@keyframes kdSway { 50% { transform: rotate(5deg); } }
+.kd.pose-wave .kd-arm { animation: kdWave .7s ease-in-out infinite alternate; }
+@keyframes kdWave { from { transform: rotate(-70deg); } to { transform: rotate(-35deg); } }
+.kd.pose-cheer .kd-arm { transform: rotate(-80deg); }
+.kd.pose-cheer .kd-arm-rest { animation: none; transform: rotate(80deg); }
+.kd.pose-cheer .kd-float { animation: kdHop .5s ease-in-out infinite alternate; }
+@keyframes kdHop { to { transform: translateY(-20px); } }
+.kd.pose-cheer .kd-mouth { d: path('M84 108 Q 100 128 116 108 Z'); fill: #06210a; }
+.kd-pupils { transition: transform .12s ease-out; }
+
+/* ── speech bubble ── */
+.kd-bubble {
+  position: absolute; bottom: calc(100% - 6px); width: 340px; max-width: calc(100vw - 32px);
+  left: 0; right: auto; padding: 1.05rem 1.15rem 1rem; border-radius: 1.2rem 1.2rem 1.2rem .35rem;
+  background: var(--bg-alt); color: var(--text); border: 1px solid var(--border-hover);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .5), 0 0 30px rgba(0, 230, 118, .12);
+  opacity: 0; pointer-events: none; translate: 0 12px; transition: opacity .3s ease, translate .3s ease;
+}
+[data-theme="light"] .kd-bubble { background: #fff; box-shadow: 0 20px 50px rgba(15, 23, 42, .2); }
+/* the robot sits on the right and faces left: the bubble grows out to the left */
+.kd.face-left .kd-bubble { left: auto; right: 0; border-radius: 1.2rem 1.2rem .35rem 1.2rem; }
+.kd-bubble.on { opacity: 1; pointer-events: auto; translate: 0 0; }
+.kd-bubble h4 { font: 700 1.02rem 'Space Grotesk', 'Inter', sans-serif; color: var(--text-strong); margin: 0 0 .3rem; }
+.kd-bubble p { font-size: .92rem; line-height: 1.55; margin: 0; min-height: 3.1em; }
+.kd-bubble .kd-step { position: absolute; top: .85rem; right: 1rem; font-size: .72rem; font-weight: 700; letter-spacing: .06em; color: var(--text-muted); }
+.kd-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .85rem; }
+.kd-btn {
+  font: 700 .82rem 'Inter', sans-serif; padding: .5rem .95rem; border-radius: 100px; cursor: pointer; color: var(--text-strong);
+  border: 1px solid var(--border-hover); background: var(--bg-card); transition: transform .15s, background .2s, border-color .2s;
+}
+.kd-btn:hover { transform: translateY(-1px); border-color: var(--accent-2); }
+.kd-btn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+.kd-btn--go { background: var(--grad-btn); color: #fff; border-color: transparent; }
+.kd-btn--ghost { border-color: transparent; background: transparent; color: var(--text-muted); font-weight: 600; }
+.kd-dots { display: flex; justify-content: center; gap: 6px; flex-basis: 100%; margin-top: .25rem; }
+.kd-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--border-hover); transition: transform .3s, background .3s; }
+.kd-dots i.on { background: var(--accent-2); transform: scale(1.5); }
+.kd-menu { display: flex; flex-direction: column; gap: .45rem; margin-top: .7rem; }
+.kd-menu .kd-btn { text-align: left; display: flex; align-items: center; gap: .55rem; border-radius: 12px; }
+.kd-toast { padding: .7rem 1rem; width: max-content; max-width: min(340px, calc(100vw - 32px)); }
+.kd-toast p { min-height: 0; font-weight: 600; color: var(--text-strong); }
+
+@media (max-width: 640px) {
+  /* no translate here: a transformed parent would become the bubble's positioning box and squeeze it */
+  .kd { width: 96px; bottom: 12px; left: auto; right: 12px; translate: none; }
+  .kd-bubble { position: fixed; left: 12px; right: 12px; bottom: 118px; width: auto; max-width: none; border-radius: 1.2rem; }
+  .kd.face-left .kd-bubble { left: 12px; right: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kd-float, .kd-flame, .kd-eyes, .kd-star, .kd-tail, .kd-arm-rest, .kd-ring, .kd.pose-wave .kd-arm, .kd.pose-cheer .kd-float, .kd.entering { animation: none; }
+  .kd { transition: none; }
+  .kd-arm, .kd-veil, .kd-bubble { transition: none; }
+}
+@media print { .kd, .kd-veil, .kd-ring { display: none; } }
