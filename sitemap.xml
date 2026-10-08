@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://kiddosphere.in/</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://kiddosphere.in/images/profile.png</image:loc>
+      <image:title>N Bharath Chowdary, Founder and CEO of Trinetro Labs</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kiddosphere.in/images/og.png</image:loc>
+      <image:title>N Bharath Chowdary: Founder of Trinetro Labs, SCOUT '24 London winner</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://kiddosphere.in/assets/N%20BHARATH%20CHOWDARY-AI-Engineer-Resume.pdf</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

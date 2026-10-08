@@ -1,0 +1,218 @@
+/* ═══════════════════════════════════════════════════════════
+   FX LAYER: motion and polish on top of style.css.
+   Everything here is progressive: without JavaScript (or with
+   "reduce motion" on) the page is the plain, readable one.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── scroll progress + cursor glow + background canvas ── */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 10000;
+  transform-origin: 0 50%; transform: scaleX(0);
+  background: var(--grad); box-shadow: 0 0 14px var(--accent-2);
+  pointer-events: none;
+}
+#bg-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.cursor-glow {
+  position: fixed; left: 0; top: 0; width: 460px; height: 460px; margin: -230px 0 0 -230px;
+  border-radius: 50%; pointer-events: none; z-index: 0; opacity: 0; transition: opacity .4s;
+  background: radial-gradient(circle, rgba(0, 230, 118, .13), transparent 66%);
+  will-change: transform;
+}
+.cursor-glow.on { opacity: 1; }
+[data-theme="light"] .cursor-glow { background: radial-gradient(circle, rgba(109, 40, 217, .10), transparent 66%); }
+
+/* ── reveal on scroll (uses `translate`, so it never fights a hover transform) ── */
+.js .reveal { opacity: 0; translate: 0 26px; transition: opacity .7s ease, translate .7s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--d, 0ms); }
+.js .reveal.in { opacity: 1; translate: 0 0; }
+.js .reveal.reveal-left { translate: -30px 0; }
+.js .reveal.reveal-left.in { translate: 0 0; }
+
+/* the old fade classes are not used any more, keep them inert */
+.will-fade { opacity: 1; transform: none; }
+
+/* ── section titles: a sweep under the heading ── */
+.section-title { position: relative; display: inline-block; }
+.section-title::after {
+  content: ''; position: absolute; left: 0; bottom: -.35rem; height: 3px; width: 100%;
+  background: var(--grad); border-radius: 3px; transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform .9s cubic-bezier(.2, .7, .2, 1) .15s;
+}
+.section-header.in .section-title::after, .no-js .section-title::after { transform: scaleX(1); }
+.section-header { text-align: center; }
+.section-header .section-title { margin-inline: auto; }
+
+/* ── animated gradient on the hero name ── */
+.gradient-text { background-size: 220% 100%; animation: gradShift 7s ease-in-out infinite; }
+@keyframes gradShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+/* ── hero extras ── */
+.badge-scout {
+  display: inline-flex; align-items: center; gap: .45rem; position: relative; overflow: hidden;
+  font-size: .8rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+  color: #1c1400; padding: .35rem .9rem; border-radius: 100px;
+  background: linear-gradient(135deg, #ffe58a, #ffc83d 55%, #ffb300);
+  box-shadow: 0 0 0 1px rgba(255, 200, 61, .5), 0 6px 22px rgba(255, 190, 40, .28);
+}
+.badge-scout:hover { color: #1c1400; transform: translateY(-2px); }
+.badge-scout::after {
+  content: ''; position: absolute; inset: 0; transform: translateX(-120%);
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, .7) 50%, transparent 70%);
+  animation: shine 3.6s ease-in-out infinite;
+}
+@keyframes shine { 0%, 55% { transform: translateX(-120%); } 85%, 100% { transform: translateX(120%); } }
+
+.hero-typed { font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--accent-2); margin: -.4rem 0 1.1rem; min-height: 1.8em; }
+.hero-typed .typed-caret { display: inline-block; width: 2px; height: 1.05em; margin-left: 3px; vertical-align: -.15em; background: var(--accent-2); animation: caret 1s steps(1) infinite; }
+@keyframes caret { 50% { opacity: 0; } }
+
+.hero-orbit { position: absolute; inset: -22px; animation: spin 26s linear infinite; pointer-events: none; }
+.orbit-chip {
+  position: absolute; top: 50%; left: 50%; width: 46px; height: 46px; margin: -23px;
+  transform: rotate(var(--a)) translateX(212px) rotate(calc(var(--a) * -1));
+}
+.orbit-chip span {
+  display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%;
+  background: var(--bg-card); border: 1px solid var(--border-hover); color: var(--accent-2); font-size: 1.05rem;
+  backdrop-filter: blur(8px); box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+  animation: spin-rev 26s linear infinite;
+}
+.orbit-chip--gold span { color: #ffc83d; border-color: rgba(255, 200, 61, .5); }
+@keyframes spin-rev { to { transform: rotate(-360deg); } }
+
+/* ── skills marquee (inside the hero, decorative) ── */
+.marquee { flex: 1 0 100%; overflow: hidden; margin-top: .5rem; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.marquee__track { display: flex; gap: .75rem; width: max-content; animation: marquee 38s linear infinite; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__track span {
+  font-size: .82rem; font-weight: 600; color: var(--text-muted); padding: .38rem .95rem; border-radius: 100px;
+  border: 1px solid var(--border); background: var(--bg-card); white-space: nowrap;
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ── tilt cards ── */
+.tilt { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .35s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease; will-change: transform; }
+.tilt.tilting { transition: transform .08s linear, border-color .25s ease, box-shadow .25s ease, background .25s ease; }
+.card.tilt:hover, .trinetro-card.tilt:hover, .skill-group.tilt:hover { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-4px); }
+.tilt::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .10), transparent 60%);
+}
+.tilt:hover::after { opacity: 1; }
+.skill-group, .trinetro-card { position: relative; }
+
+/* ── magnetic buttons ── */
+.magnetic { translate: var(--tx, 0) var(--ty, 0); transition: translate .25s ease, transform .2s ease, box-shadow .2s ease, background .25s ease, border-color .25s ease; }
+
+/* ── skill chips pop ── */
+.skill-badge { transition: transform .25s cubic-bezier(.3, 1.6, .5, 1), border-color .25s, color .25s, background .25s; }
+.skill-badge:hover { transform: translateY(-3px) scale(1.07); }
+
+/* ── experience timeline: the line draws itself as you scroll ── */
+.timeline::before { background: var(--border); }
+.timeline::after {
+  content: ''; position: absolute; left: 9px; top: 0; width: 2px; border-radius: 2px;
+  height: calc(var(--p, 0) * 100%); background: linear-gradient(to bottom, var(--accent-1), var(--accent-2));
+  box-shadow: 0 0 12px var(--accent-2);
+}
+.no-js .timeline::after { height: 100%; }
+
+/* ═══════════ SCOUT '24 ═══════════ */
+@property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.scout-card {
+  position: relative; border-radius: 1.4rem; padding: 2px; isolation: isolate;
+  background: conic-gradient(from var(--ang), #ffc83d, #00e676, #69ff9c, #ffc83d);
+  animation: ang 7s linear infinite; box-shadow: 0 20px 70px rgba(255, 190, 40, .10);
+}
+@keyframes ang { to { --ang: 360deg; } }
+.scout-inner { border-radius: calc(1.4rem - 2px); background: var(--bg-alt); overflow: hidden; position: relative; }
+[data-theme="light"] .scout-inner { background: #fff; }
+.scout-inner::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(600px 300px at 85% 0%, rgba(255, 200, 61, .13), transparent 70%), radial-gradient(500px 280px at 0% 100%, rgba(0, 230, 118, .10), transparent 70%);
+}
+.scout-route { position: relative; padding: 1.5rem 1.5rem 0; }
+.scout-route svg { width: 100%; height: auto; display: block; overflow: visible; }
+.route-path { fill: none; stroke: var(--accent-2); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 9; opacity: .75; }
+.route-draw { fill: none; stroke: url(#routeGrad); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 900; stroke-dashoffset: 900; transition: stroke-dashoffset 2.6s cubic-bezier(.4, 0, .2, 1) .3s; }
+.scout-card.in .route-draw { stroke-dashoffset: 0; }
+.no-js .route-draw { stroke-dashoffset: 0; }
+.route-node { fill: var(--accent-2); }
+.route-pulse { fill: none; stroke: var(--accent-2); stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: pulse 2.4s ease-out infinite; }
+.route-pulse.gold { stroke: #ffc83d; }
+@keyframes pulse { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(2.4); opacity: 0; } }
+.route-label { font: 700 15px 'Space Grotesk', 'Inter', sans-serif; fill: var(--text-strong); }
+.route-sub { font: 500 11px 'Inter', sans-serif; fill: var(--text-muted); }
+.skyline { fill: none; stroke: var(--text-muted); stroke-width: 1.6; stroke-linejoin: round; opacity: .75; }
+.skyline-fill { fill: var(--bg-card); }
+.eye-spin { transform-box: fill-box; transform-origin: center; animation: spin 28s linear infinite; }
+.plane { fill: #ffc83d; filter: drop-shadow(0 0 6px rgba(255, 200, 61, .8)); }
+
+.scout-body { position: relative; padding: 1.5rem 2rem 2rem; display: grid; grid-template-columns: 1.15fr .85fr; gap: 2rem; align-items: start; }
+.scout-trophy {
+  display: inline-grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; font-size: 1.5rem; color: #1c1400; margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ffe58a, #ffb300); box-shadow: 0 10px 30px rgba(255, 190, 40, .35);
+  animation: trophy 3.2s ease-in-out infinite;
+}
+@keyframes trophy { 0%, 100% { transform: rotate(-6deg) translateY(0); } 50% { transform: rotate(6deg) translateY(-4px); } }
+.scout-body h3 { font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 1.55rem; color: var(--text-strong); line-height: 1.25; margin-bottom: .8rem; }
+.scout-body p { margin-bottom: .9rem; }
+.scout-pillars { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.scout-pillars span { font-size: .8rem; font-weight: 600; padding: .3rem .8rem; border-radius: 100px; color: var(--accent-2); border: 1px solid var(--border-hover); background: var(--bg-card); }
+.scout-stats { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+.scout-stat { padding: 1rem; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-card); text-align: center; }
+.scout-stat b { display: block; font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 1.9rem; line-height: 1.1; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.scout-stat small { color: var(--text-muted); font-size: .78rem; }
+.scout-stat--gold b { background: linear-gradient(135deg, #ffe58a, #ffb300); -webkit-background-clip: text; background-clip: text; }
+
+.scout-steps { list-style: none; position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 0 2rem 2rem; counter-reset: s; }
+.scout-steps li { position: relative; padding-top: 2.6rem; font-size: .88rem; color: var(--text-muted); }
+.scout-steps li strong { display: block; color: var(--text-strong); font-size: .95rem; margin-bottom: .15rem; }
+.scout-steps li::before {
+  counter-increment: s; content: counter(s); position: absolute; top: 0; left: 0; z-index: 1; width: 2rem; height: 2rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 800; font-size: .85rem; color: var(--bg); background: var(--accent-2); box-shadow: 0 0 0 4px var(--bg-alt);
+}
+.scout-steps li:last-child::before { background: #ffc83d; color: #1c1400; box-shadow: 0 0 0 4px var(--bg-alt), 0 0 22px rgba(255, 200, 61, .7); }
+.scout-steps li::after { content: ''; position: absolute; top: calc(1rem - 1px); left: 2rem; right: -1rem; height: 2px; background: linear-gradient(90deg, var(--accent-2), var(--border)); transform: scaleX(0); transform-origin: 0 50%; transition: transform .8s ease calc(var(--d, 0ms) + .5s); }
+.scout-card.in .scout-steps li::after { transform: scaleX(1); }
+.scout-steps li:last-child::after { display: none; }
+.no-js .scout-steps li::after { transform: scaleX(1); }
+
+/* ── confetti canvas ── */
+#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10001; }
+
+/* ── about CTA / trinetro button sheen ── */
+.about-cta, .trinetro-visit-btn, .btn-primary { position: relative; overflow: hidden; }
+
+/* ── responsive ── */
+@media (max-width: 900px) {
+  .scout-body { grid-template-columns: 1fr; padding: 1.25rem 1.25rem 1.5rem; }
+  .scout-steps { grid-template-columns: 1fr 1fr; padding: 0 1.25rem 1.5rem; row-gap: 1.5rem; }
+  .scout-steps li::after { display: none; }
+  .scout-route { padding: 1rem 1rem 0; }
+}
+@media (max-width: 640px) {
+  .hero-orbit { display: none; }
+  .scout-steps { grid-template-columns: 1fr; }
+  .scout-body h3 { font-size: 1.3rem; }
+}
+
+/* ── reduce motion: keep everything visible and still ── */
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal, .js .reveal.reveal-left { opacity: 1; translate: 0 0; transition: none; }
+  .gradient-text, .badge-scout::after, .hero-orbit, .orbit-chip span, .marquee__track, .scout-card, .scout-trophy, .route-pulse, .eye-spin { animation: none; }
+  .section-title::after { transform: scaleX(1); transition: none; }
+  .route-draw { stroke-dashoffset: 0; transition: none; }
+  .scout-steps li::after { transform: scaleX(1); transition: none; }
+  .timeline::after { height: 100%; }
+  .tilt { transform: none !important; }
+  .cursor-glow, #bg-canvas { display: none; }
+}
+
+/* ── contact form message (replaces the browser's alert box) ── */
+.form-note { margin: .6rem 0 0; font-size: .88rem; font-weight: 600; color: #ffb347; }
+.form-note[hidden] { display: none; }
+
+/* gold needs to be darker to read on the light theme */
+[data-theme="light"] .scout-stat--gold b { background: linear-gradient(135deg, #b97700, #8a5a00); -webkit-background-clip: text; background-clip: text; }
+[data-theme="light"] .scout-trophy { color: #3a2600; }
+[data-theme="light"] .badge-scout { box-shadow: 0 0 0 1px rgba(184, 119, 0, .45), 0 6px 18px rgba(184, 119, 0, .22); }

@@ -1,0 +1,29 @@
+# N Bharath Chowdary
+
+> Founder and CEO of Trinetro Labs, an Automated Intelligence platform for data analysis. AI engineer from Yadgir, Karnataka, India. First-place winner of SCOUT '24 in London (final round: pitching a new sustainable business idea).
+
+This is the personal portfolio at https://kiddosphere.in/. It is one page; every section below is on it.
+
+## Highlights
+
+- SCOUT '24, London (2024): selected from Karnataka among the top 1% of undergraduate students for 15 days of training on entrepreneurship, sustainability in entrepreneurship and business development. The programme ended with a final round in which teams pitched a new business idea in a sustainable way. N Bharath's team won first place.
+- Founder and CEO of Trinetro Labs (2024 to present): https://trinetrolabs.com. Ask a question about your data in plain English and get an exact, explainable answer.
+- BCA graduate, Government Degree College, Yadgir.
+
+## Sections
+
+- SCOUT '24 in London: https://kiddosphere.in/#scout
+- About: https://kiddosphere.in/#about
+- Trinetro Labs: https://kiddosphere.in/#trinetro
+- Projects: https://kiddosphere.in/#projects (Rekon AI, DermAI, PixelSafe, Edunexa, Crime Scene Detector, Brain Stroke Detection)
+- Skills: https://kiddosphere.in/#skills
+- Experience: https://kiddosphere.in/#experience
+- Contact: https://kiddosphere.in/#connect
+
+## Links
+
+- Resume (PDF): https://kiddosphere.in/assets/N%20BHARATH%20CHOWDARY-AI-Engineer-Resume.pdf
+- LinkedIn: https://linkedin.com/in/n-bharath-chowdary
+- GitHub: https://github.com/n-bharath-chowdary
+- X: https://x.com/NBharathChowda3
+- Trinetro Labs: https://trinetrolabs.com
